@@ -9,8 +9,8 @@
 <body>
     <div class="container mt-5">
         <h2>Register</h2>
-        <form action="../../register.php" method="POST">
-            <div class="form-group">
+        <form action="../../controllers/AuthController.php?action=register" method="POST">
+            <div class="form-group"> 
                 <label for="username">Username</label>
                 <input type="text" class="form-control" id="username" name="username" required>
             </div>

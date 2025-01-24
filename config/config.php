@@ -1,18 +1,22 @@
 <?php
-$host = 'localhost';
-$dbname = 'event_management_system';
-$username = 'root';
-$password = '';
 
-try {
-    $pdo = new PDO("mysql:host=$host;dbname=$dbname", $username, $password);
-    $pdo->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
-    echo "connection setup done";
-} catch (PDOException $e) {
-    echo "connection setup failed";
-    die("Database connection failed: " . $e->getMessage());
+class DatabaseConnection {
+    private $host = 'localhost';
+    private $db_name = 'event_management_system';
+    private $username = 'root';
+    private $password = '';
+    private $conn;
+
+    public function connect() {
+        $this->conn = null;
+
+        try {
+            $this->conn = new PDO('mysql:host=' . $this->host . ';dbname=' . $this->db_name, $this->username, $this->password);
+            $this->conn->setAttribute(PDO::ATTR_ERRMODE, PDO::ERRMODE_EXCEPTION);
+        } catch(PDOException $e) {
+            echo 'Connection Error: ' . $e->getMessage();
+        }
+
+        return $this->conn;
+    }
 }
-
-define('BASE_URL', 'http://localhost/event-management-system/');
-define('EVENTS_PER_PAGE', 10);
-?>

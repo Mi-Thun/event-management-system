@@ -9,7 +9,7 @@
 <body>
     <div class="container mt-5">
         <h2>Create New Event</h2>
-        <form action="../../create_event.php" method="POST">
+        <form action="/event-management-system/events/create" method="POST">
             <div class="form-group">
                 <label for="name">Event Name</label>
                 <input type="text" class="form-control" id="name" name="name" required>
@@ -23,7 +23,7 @@
                 <input type="date" class="form-control" id="date" name="date" required>
             </div>
             <button type="submit" class="btn btn-primary">Create Event</button>
-            <a href="../index.php" class="btn btn-secondary">Cancel</a>
+            <a href="/event-management-system/" class="btn btn-secondary">Cancel</a>
         </form>
     </div>
 </body>

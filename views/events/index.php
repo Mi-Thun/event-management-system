@@ -7,8 +7,9 @@
 <body>
     <div class="container mt-5">
         <h2>Event List</h2>
-        <a href="create.php" class="btn btn-primary mb-3">Create Event</a>
-        <a href="../../logout.php" class="btn btn-secondary mb-3">Logout</a>
+        <a href="/event-management-system/events/create" class="btn btn-primary mb-3">Create Event</a>
+        <a href="/event-management-system/logout.php" class="btn btn-secondary mb-3">Logout</a>
+
         <table class="table">
             <thead>
                 <tr>
@@ -19,17 +20,23 @@
                 </tr>
             </thead>
             <tbody>
-                <?php foreach ($events as $event): ?>
+                <?php if (!empty($events)): ?>
+                    <?php foreach ($events as $event): ?>
+                        <tr>
+                            <td><?= htmlspecialchars($event['name']) ?></td>
+                            <td><?= htmlspecialchars($event['description']) ?></td>
+                            <td><?= htmlspecialchars($event['date']) ?></td>
+                            <td>
+                                <a href="/event-management-system/events/edit?id=<?= $event['id'] ?>" class="btn btn-sm btn-warning">Edit</a>
+                                <a href="/event-management-system/events/delete?id=<?= $event['id'] ?>" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">Delete</a>
+                            </td>
+                        </tr>
+                    <?php endforeach; ?>
+                <?php else: ?>
                     <tr>
-                        <td><?= htmlspecialchars($event['name']) ?></td>
-                        <td><?= htmlspecialchars($event['description']) ?></td>
-                        <td><?= htmlspecialchars($event['date']) ?></td>
-                        <td>
-                            <a href="edit.php?id=<?= $event['id'] ?>" class="btn btn-sm btn-warning">Edit</a>
-                            <a href="delete_event.php?id=<?= $event['id'] ?>" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">Delete</a>
-                        </td>
+                        <td colspan="4">No events found.</td>
                     </tr>
-                <?php endforeach; ?>
+                <?php endif; ?>
             </tbody>
         </table>
     </div>
