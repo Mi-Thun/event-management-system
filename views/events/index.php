@@ -8,7 +8,7 @@
     <div class="container mt-5">
         <h2>Event List</h2>
         <a href="/event-management-system/events/create" class="btn btn-primary mb-3">Create Event</a>
-        <a href="/event-management-system/logout.php" class="btn btn-secondary mb-3">Logout</a>
+        <a href="/event-management-system/logout" class="btn btn-secondary mb-3">Logout</a>
 
         <table class="table">
             <thead>
@@ -16,6 +16,7 @@
                     <th>Name</th>
                     <th>Description</th>
                     <th>Date</th>
+                    <th>Max Capacity</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -26,9 +27,11 @@
                             <td><?= htmlspecialchars($event['name']) ?></td>
                             <td><?= htmlspecialchars($event['description']) ?></td>
                             <td><?= htmlspecialchars($event['date']) ?></td>
+                            <td><?= htmlspecialchars($event['max_capacity']) ?></td>
                             <td>
                                 <a href="/event-management-system/events/edit?id=<?= $event['id'] ?>" class="btn btn-sm btn-warning">Edit</a>
                                 <a href="/event-management-system/events/delete?id=<?= $event['id'] ?>" class="btn btn-sm btn-danger" onclick="return confirm('Are you sure?')">Delete</a>
+                                <a href="/event-management-system/reports?id=<?= $event['id'] ?>" class="btn btn-sm btn-info">Report</a>
                             </td>
                         </tr>
                     <?php endforeach; ?>

@@ -22,6 +22,10 @@
                 <label for="date">Date</label>
                 <input type="date" class="form-control" id="date" name="date" required>
             </div>
+            <div class="form-group">
+                <label for="max_capacity">Max Capacity</label>
+                <input type="number" class="form-control" id="max_capacity" name="max_capacity" required>
+            </div>
             <button type="submit" class="btn btn-primary">Create Event</button>
             <a href="/event-management-system/" class="btn btn-secondary">Cancel</a>
         </form>

@@ -9,7 +9,7 @@
 <body>
     <div class="container mt-5">
         <h2>Register</h2>
-        <form action="../../controllers/AuthController.php?action=register" method="POST">
+        <form action="/event-management-system/register" method="POST">
             <div class="form-group"> 
                 <label for="username">Username</label>
                 <input type="text" class="form-control" id="username" name="username" required>
@@ -28,7 +28,7 @@
             </div>
             <button type="submit" class="btn btn-primary">Register</button>
         </form>
-        <p class="mt-3">Already have an account? <a href="login.php">Login here</a>.</p>
+        <p class="mt-3">Already have an account? <a href="/event-management-system/login">Login here</a>.</p>
     </div>
 </body>
 </html>

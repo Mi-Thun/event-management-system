@@ -21,6 +21,10 @@
                 <label for="date">Date</label>
                 <input type="date" class="form-control" id="date" name="date" value="<?= htmlspecialchars($event['date']) ?>" required>
             </div>
+            <div class="form-group">
+                <label for="max_capacity">Max Capacity</label>
+                <input type="number" class="form-control" id="max_capacity" name="max_capacity" value="<?= htmlspecialchars($event['max_capacity']) ?>" required>
+            </div>
             <button type="submit" class="btn btn-primary">Update Event</button>
             <a href="/event-management-system/" class="btn btn-secondary">Cancel</a>
         </form>

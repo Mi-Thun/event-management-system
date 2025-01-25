@@ -9,7 +9,7 @@
 <body>
     <div class="container mt-5">
         <h2>Login</h2>
-        <form action="../../controllers/AuthController.php?action=login" method="POST">"
+        <form action="/event-management-system/login" method="POST">
             <div class="form-group">
                 <label for="email">Email</label>
                 <input type="email" class="form-control" id="email" name="email" required>
@@ -19,7 +19,7 @@
                 <input type="password" class="form-control" id="password" name="password" required>
             </div>
             <button type="submit" class="btn btn-primary">Login</button>
-            <a href="register.php" class="btn btn-link">Register</a>
+            <a href="/event-management-system/register" class="btn btn-link">Register</a>
         </form>
     </div>
 </body>

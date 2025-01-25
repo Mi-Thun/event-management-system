@@ -4,7 +4,7 @@ class AuthController {
     private $userModel;
 
     public function __construct($db) {
-        require_once '../models/User.php';
+        require_once __DIR__ . '/../models/User.php';
         $this->userModel = new User($db);
     }
 
@@ -15,12 +15,14 @@ class AuthController {
             $email = trim($_POST['email']);
 
             if ($this->userModel->register($username, $password, $email)) {
-                header('Location: ../views/auth/login.php?success=1');
+                header('Location: /event-management-system/login');
+                exit();
             } else {
-                header('Location: ../views/auth/register.php?error=1');
+                header('Location: /event-management-system/');
+                exit();
             }
         } else {
-            require '../views/auth/register.php';
+            require __DIR__ . '/../views/auth/register.php';
         }
     }
 
@@ -31,42 +33,21 @@ class AuthController {
 
             if ($this->userModel->login($email, $password)) {
                 $_SESSION['user'] = $email;
-                header('Location: ../views/dashboard.php');
+                header('Location: /event-management-system/');
+                exit();
             } else {
-                header('Location: ../views/auth/login.php?error=1');
+                header('Location: /event-management-system/?action=login&error=1');
+                exit();
             }
         } else {
-            require '../views/auth/login.php';
+            require __DIR__ . '/../views/auth/login.php';
         }
     }
 
     public function logout() {
         session_destroy();
-        header('Location: ../views/auth/login.php');
+        require __DIR__ . '/../views/auth/login.php';
+        exit();
     }
 }
-require_once '../config/config.php'; 
-$db = (new DatabaseConnection())->connect(); 
-$controller = new AuthController($db);
-
-// Handle the action parameter to call the appropriate method
-if (isset($_GET['action'])) {
-    $action = $_GET['action'];
-    $controller = new AuthController(($db));
-
-    switch ($action) {
-        case 'register':
-            $controller->register();
-            break;
-        case 'login':
-            $controller->login();
-            break;
-        case 'logout':
-            $controller->logout();
-            break;
-        default:
-            // Handle unknown action
-            header('Location: ../views/auth/login.php');
-            break;
-    }
-}
+?>

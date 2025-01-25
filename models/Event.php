@@ -13,9 +13,9 @@ class Event {
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 
-    public function createEvent($name, $description, $date) {
-        $stmt = $this->db->prepare("INSERT INTO events (name, description, date) VALUES (?, ?, ?)");
-        return $stmt->execute([$name, $description, $date]);
+    public function createEvent($name, $description, $date, $max_capacity) {
+        $stmt = $this->db->prepare("INSERT INTO events (name, description, date, max_capacity) VALUES (?, ?, ?, ?)");
+        return $stmt->execute([$name, $description, $date, $max_capacity]);
     }
 
     public function getEventById($id) {
@@ -24,9 +24,9 @@ class Event {
         return $stmt->fetch(PDO::FETCH_ASSOC);
     }
 
-    public function updateEvent($id, $name, $description, $date) {
-        $stmt = $this->db->prepare("UPDATE events SET name = ?, description = ?, date = ? WHERE id = ?");
-        return $stmt->execute([$name, $description, $date, $id]);
+    public function updateEvent($id, $name, $description, $date, $max_capacity) {
+        $stmt = $this->db->prepare("UPDATE events SET name = ?, description = ?, date = ?, max_capacity = ? WHERE id = ?");
+        return $stmt->execute([$name, $description, $date, $max_capacity, $id]);
     }
 
     public function deleteEvent($id) {
