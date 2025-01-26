@@ -10,8 +10,20 @@ class EventController {
         $this->attendeeModel = new Attendee($db);
     }
 
+    // public function index() {
+    //     $events = $this->eventModel->getAllEvents();
+    //     require __DIR__ . '/../views/events/list.php';
+    // }
+
     public function index() {
-        $events = $this->eventModel->getAllEvents();
+        $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+        $limit = 5;
+        $offset = ($page - 1) * $limit;
+    
+        $events = $this->eventModel->getEventsWithPagination($limit, $offset);
+        $totalEvents = $this->eventModel->getTotalEvents();
+        $totalPages = ceil($totalEvents / $limit);
+    
         require __DIR__ . '/../views/events/list.php';
     }
 
@@ -78,11 +90,17 @@ class EventController {
         fclose($output);
         exit();
     }
-    
+
     public function viewEvent($id) {
         $event = $this->eventModel->getEventById($id);
         $attendees = $this->attendeeModel->getAttendeesByEventId($id);
         require __DIR__ . '/../views/events/view.php';
+    }
+
+    public function search() {
+        $query = isset($_GET['query']) ? $_GET['query'] : '';
+        $events = $this->eventModel->searchEvents($query);
+        echo json_encode($events);
     }
 }
 ?>

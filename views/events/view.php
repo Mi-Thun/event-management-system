@@ -5,21 +5,47 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Event Details</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css">
+    <style>
+        body {
+            background-color: #f8f9fa;
+        }
+        .container {
+            background-color: #ffffff;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            max-width: 800px;
+            margin-top: 8px;
+        }
+        .event-details {
+            margin-bottom: 1px;
+        }
+        .event-details h5 {
+            font-size: 1.5rem;
+            margin-bottom: 1px;
+        }
+        .event-details p {
+            margin-bottom: 1px;
+        }
+        .table {
+            margin-top: 1px;
+        }
+        .btn {
+            margin-top: 5px;
+        }
+    </style>
 </head>
 <body>
-    <div class="container mt-5">
+    <div class="container">
         <h2>Event Details</h2>
-        <div class="card mb-3">
-            <div class="card-body">
-                <h5 class="card-title"><?= htmlspecialchars($event['name']) ?></h5>
-                <p class="card-text"><?= htmlspecialchars($event['description']) ?></p>
-                <p class="card-text"><strong>Date:</strong> <?= htmlspecialchars($event['date']) ?></p>
-                <p class="card-text"><strong>Max Capacity:</strong> <?= htmlspecialchars($event['max_capacity']) ?></p>
-            </div>
+        <div class="event-details">
+            <h5><?= htmlspecialchars($event['name']) ?></h5>
+            <p><?= htmlspecialchars($event['description']) ?></p>
+            <p><strong>Date:</strong> <?= htmlspecialchars($event['date']) ?></p>
+            <p><strong>Max Capacity:</strong> <?= htmlspecialchars($event['max_capacity']) ?></p>
         </div>
 
         <h3>Attendees</h3>
-        <table class="table">
+        <table class="table table-striped">
             <thead>
                 <tr>
                     <th>Name</th>

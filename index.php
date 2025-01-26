@@ -65,6 +65,10 @@ $router->add('/event-management-system/events/view', function() {
     handleRequest('EventController', 'viewEvent', $_GET['id']);
 });
 
+$router->add('/event-management-system/search', function() {
+    handleRequest('EventController', 'search');
+});
+
 $url = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 parse_str(parse_url($_SERVER['REQUEST_URI'], PHP_URL_QUERY), $_GET);
 $router->dispatch($url);
