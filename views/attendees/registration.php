@@ -10,23 +10,19 @@
     <div class="container mt-5">
         <h2>Registration Event</h2>
         <form action="/event-management-system/attendee" method="POST">
-        <div class="form-group">
+            <div class="form-group">
                 <label for="event_id">Select Event</label>
                 <select class="form-control" id="event_id" name="event_id" required>
-                    <?php foreach ($events as $event): ?>
-                        <option value="<?= $event['id'] ?>"><?= htmlspecialchars($event['name']) ?></option>
-                    <?php endforeach; ?>
+                    <?php if (!empty($events_drop)): ?>
+                        <?php foreach ($events_drop as $event): ?>
+                            <option value="<?= $event['id'] ?>"><?= htmlspecialchars($event['name']) ?></option>
+                        <?php endforeach; ?>
+                    <?php else: ?>
+                        <option value="">No events available</option>
+                    <?php endif; ?>
                 </select>
             </div>
-            <div class="form-group">
-                <label for="description">Name</label>
-                <textarea class="form-control" id="description" name="description" required></textarea>
-            </div>
-            <div class="form-group">
-                <label for="max_capacity">Seat</label>
-                <input type="number" class="form-control" id="max_capacity" name="max_capacity" required>
-            </div>
-            <button type="submit" class="btn btn-primary">Registration Event</button>
+            <button type="submit" class="btn btn-primary">Register</button>
             <a href="/event-management-system/" class="btn btn-secondary">Cancel</a>
         </form>
     </div>

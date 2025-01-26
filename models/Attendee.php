@@ -8,19 +8,22 @@ class Attendee {
         $this->db = $database;
     }
 
-    public function registerAttendee($event_id, $user_id) {
+    public function register($event_id, $user_id) {
         $stmt = $this->db->prepare("INSERT INTO attendees (event_id, user_id) VALUES (?, ?)");
-        $stmt->bind_param($event_id, $user_id);
-        return $stmt->execute();
+        return $stmt->execute([$event_id, $user_id]);
     }
 
     public function getAttendeeCountByEventId($event_id) {
         $stmt = $this->db->prepare("SELECT COUNT(*) as count FROM attendees WHERE event_id = ?");
-        $stmt->bind_param("i", $event_id);
-        $stmt->execute();
-        $result = $stmt->get_result();
-        $row = $result->fetch_assoc();
-        return $row['count'];
+        $stmt->execute([$event_id]);
+        $result = $stmt->fetch(PDO::FETCH_ASSOC);
+        return $result['count'];
+    }
+
+    public function getAttendeesByEventId($event_id) {
+        $stmt = $this->db->prepare("SELECT name, email, registered_at FROM attendees WHERE event_id = ?");
+        $stmt->execute([$event_id]);
+        return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 }
 ?>

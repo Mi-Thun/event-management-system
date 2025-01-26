@@ -12,7 +12,7 @@ class EventController {
 
     public function index() {
         $events = $this->eventModel->getAllEvents();
-        require __DIR__ . '/../views/events/index.php';
+        require __DIR__ . '/../views/events/list.php';
     }
 
     public function create() {
@@ -50,52 +50,39 @@ class EventController {
 
     public function registerAttendee() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
-            $name = $_POST['event_name'];
-            $description = $_POST['description'];
-            $date = $_POST['date'];
-            $max_capacity = $_POST['max_capacity'];
+            $event_id = $_POST['event_id'];
+            $user_id = 1;
+            $this->attendeeModel->register($event_id, $user_id);
             $events = $this->eventModel->getAllEvents();
-            $this->eventModel->createEvent($name, $description, $date, $max_capacity);
             header('Location: /event-management-system/');
             exit();
         } else {
-            require __DIR__ .  '/../views/attendees/register.php';
+            $events_drop = $this->eventModel->getAllEvents();
+            require __DIR__ .  '/../views/attendees/registration.php';
         }
     }
 
-    public function getAttendeeList($event_id) {
-        return $this->attendeeModel->getAttendeesByEventId($event_id);
+    public function downloadReport($event_id) {
+        $attendees = $this->attendeeModel->getAttendeesByEventId($event_id);
+
+        header('Content-Type: text/csv');
+        header('Content-Disposition: attachment;filename=attendees_report.csv');
+
+        $output = fopen('php://output', 'w');
+        fputcsv($output, ['Event ID', 'User Name', 'Email', 'Registered At', 'Seat Booked']);
+
+        foreach ($attendees as $attendee) {
+            fputcsv($output, [$event_id, $attendee['name'], $attendee['email'], $attendee['registered_at']]);
+        }
+
+        fclose($output);
+        exit();
+    }
+    
+    public function viewEvent($id) {
+        $event = $this->eventModel->getEventById($id);
+        $attendees = $this->attendeeModel->getAttendeesByEventId($id);
+        require __DIR__ . '/../views/events/view.php';
     }
 }
-
-// require_once __DIR__ . '/../config/config.php';
-// $db = (new DatabaseConnection())->connect();
-// $controller = new EventController($db);
-
-// if (isset($_GET['action'])) {
-//     $action = $_GET['action'];
-//     $id = isset($_GET['id']) ? $_GET['id'] : null;
-
-//     switch ($action) {
-//         case 'index':
-//             $controller->index();
-//             break;
-//         case 'create':
-//             $controller->create();
-//             break;
-//         case 'edit':
-//             if ($id !== null) {
-//                 $controller->edit($id);
-//             }
-//             break;
-//         case 'delete':
-//             if ($id !== null) {
-//                 $controller->delete($id);
-//             }
-//             break;
-//         default:
-//             header('Location: index.php?action=index');
-//             break;
-//     }
-// }
 ?>

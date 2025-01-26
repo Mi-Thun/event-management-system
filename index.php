@@ -4,64 +4,68 @@ require_once 'Router.php';
 
 $router = new Router();
 
-$router->add('/event-management-system/attendee', function() {
-    require_once 'controllers/EventController.php';
+function handleRequest($controllerName, $methodName, $id = null) {
+    require_once "controllers/{$controllerName}.php";
     $db = (new DatabaseConnection())->connect();
-    $controller = new EventController($db);
-    $controller->registerAttendee();
+    $controller = new $controllerName($db);
+    if ($id !== null) {
+        $controller->$methodName($id);
+    } else {
+        $controller->$methodName();
+    }
+}
+
+$router->add('/event-management-system/attendee', function() {
+    handleRequest('EventController', 'registerAttendee');
 });
 
 $router->add('/event-management-system/events/create', function() {
-    require_once 'controllers/EventController.php';
-    $db = (new DatabaseConnection())->connect();
-    $controller = new EventController($db);
-    $controller->create();
+    handleRequest('EventController', 'create');
 });
 
 $router->add('/event-management-system/events/edit', function() {
-    require_once 'controllers/EventController.php';
-    $db = (new DatabaseConnection())->connect();
-    $controller = new EventController($db);
-    $controller->edit($_GET['id']);
+    handleRequest('EventController', 'edit', $_GET['id']);
 });
 
 $router->add('/event-management-system/events/delete', function() {
-    require_once 'controllers/EventController.php';
-    $db = (new DatabaseConnection())->connect();
-    $controller = new EventController($db);
-    $controller->delete($_GET['id']);
+    handleRequest('EventController', 'delete', $_GET['id']);
 });
 
 $router->add('/event-management-system/login', function() {
-    require_once 'controllers/AuthController.php';
-    $db = (new DatabaseConnection())->connect();
-    $controller = new AuthController($db);
-    $controller->login();
+    handleRequest('AuthController', 'login');
 });
 
 $router->add('/event-management-system/register', function() {
-    require_once 'controllers/AuthController.php';
-    $db = (new DatabaseConnection())->connect();
-    $controller = new AuthController($db);
-    $controller->register();
+    handleRequest('AuthController', 'register');
 });
 
 $router->add('/event-management-system/logout', function() {
-    require_once 'controllers/AuthController.php';
-    $db = (new DatabaseConnection())->connect();
-    $controller = new AuthController($db);
-    $controller->logout();
+    handleRequest('AuthController', 'logout');
 });
 
 $router->add('/event-management-system/', function() {
-    require_once 'controllers/EventController.php';
-    $db = (new DatabaseConnection())->connect();
-    $controller = new EventController($db);
-    $controller->index();
+    handleRequest('EventController', 'index');
+});
+
+$router->add('/event-management-system/download_report', function() {
+    handleRequest('EventController', 'downloadReport', $_GET['id']);
+});
+
+// Redirect to the desired route when index.php is accessed
+// if (basename($_SERVER['PHP_SELF']) == 'index.php') {
+//     handleRequest('EventController', 'index');
+// }
+
+if ($_SERVER['REQUEST_URI'] == '/event-management-system/index.php') {
+    header('Location: /event-management-system/');
+    exit();
+}
+
+$router->add('/event-management-system/events/view', function() {
+    handleRequest('EventController', 'viewEvent', $_GET['id']);
 });
 
 $url = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
 parse_str(parse_url($_SERVER['REQUEST_URI'], PHP_URL_QUERY), $_GET);
-print_r($url);
 $router->dispatch($url);
 ?>
