@@ -43,21 +43,13 @@ class Event {
         return $stmt->execute([$name, $description, $date, $max_capacity, $id]);
     }
 
-    // public function deleteEvent($id) {
-    //     $stmt = $this->db->prepare("DELETE FROM events WHERE id = ?");
-    //     return $stmt->execute([$id]);
-    // }
-
     public function deleteAttendeesByEventId($eventId) {
         $stmt = $this->db->prepare("DELETE FROM attendees WHERE event_id = ?");
         $stmt->execute([$eventId]);
     }
     
     public function deleteEvent($id) {
-        // First, delete the associated attendees
         $this->deleteAttendeesByEventId($id);
-    
-        // Then, delete the event
         $stmt = $this->db->prepare("DELETE FROM events WHERE id = ?");
         $stmt->execute([$id]);
     }

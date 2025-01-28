@@ -84,10 +84,10 @@
         </table>
 
         <nav aria-label="Page navigation" class="text-right">
-            <ul class="pagination">
+            <ul class="pagination" id="pagination">
                 <?php for ($i = 1; $i <= $totalPages; $i++): ?>
                     <li class="page-item <?= ($i == $page) ? 'active' : '' ?>">
-                        <a class="page-link" href="?id=<?= $event['id'] ?>&page=<?= $i ?>"><?= $i ?></a>
+                        <a class="page-link" href="#" data-page="<?= $i ?>"><?= $i ?></a>
                     </li>
                 <?php endfor; ?>
             </ul>
@@ -99,17 +99,21 @@
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <script>
         $(document).ready(function() {
-            $('#searchQuery').on('input', function() {
-                var query = $(this).val();
+            function loadAttendees(query, page) {
                 var eventId = <?= $event['id'] ?>;
                 $.ajax({
                     url: '/event-management-system/searchAttendees',
                     type: 'GET',
-                    data: { query: query, eventId: eventId },
+                    data: { query: query, eventId: eventId, page: page },
                     success: function(response) {
-                        var attendees = JSON.parse(response);
+                        var data = JSON.parse(response);
+                        var attendees = data.attendees;
+                        var totalPages = data.totalPages;
+                        var currentPage = data.currentPage;
                         var attendeeList = $('#attendeeList');
+                        var pagination = $('#pagination');
                         attendeeList.empty();
+                        pagination.empty();
                         if (attendees.length > 0) {
                             attendees.forEach(function(attendee) {
                                 var attendeeRow = `
@@ -124,9 +128,29 @@
                         } else {
                             attendeeList.append('<tr><td colspan="4">No attendees found.</td></tr>');
                         }
+                        for (var i = 1; i <= totalPages; i++) {
+                            var pageItem = `<li class="page-item ${i == currentPage ? 'active' : ''}">
+                                                <a class="page-link" href="#" data-page="${i}">${i}</a>
+                                            </li>`;
+                            pagination.append(pageItem);
+                        }
                     }
                 });
+            }
+
+            $('#searchQuery').on('input', function() {
+                var query = $(this).val();
+                loadAttendees(query, 1);
             });
+
+            $(document).on('click', '.page-link', function(e) {
+                e.preventDefault();
+                var page = $(this).data('page');
+                var query = $('#searchQuery').val();
+                loadAttendees(query, page);
+            });
+            
+            loadAttendees('', 1);
         });
     </script>
 </body>
