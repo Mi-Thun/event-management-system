@@ -51,10 +51,6 @@ $router->add('/event-management-system/download_report', function() {
     handleRequest('EventController', 'downloadReport', $_GET['id']);
 });
 
-// Redirect to the desired route when index.php is accessed
-// if (basename($_SERVER['PHP_SELF']) == 'index.php') {
-//     handleRequest('EventController', 'index');
-// }
 
 if ($_SERVER['REQUEST_URI'] == '/event-management-system/index.php') {
     header('Location: /event-management-system/');
@@ -67,6 +63,10 @@ $router->add('/event-management-system/events/view', function() {
 
 $router->add('/event-management-system/search', function() {
     handleRequest('EventController', 'search');
+});
+
+$router->add('/event-management-system/searchAttendees', function() {
+    handleRequest('EventController', 'searchAttendees');
 });
 
 $url = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);

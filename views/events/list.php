@@ -29,6 +29,13 @@
     </style>
 </head>
 <body>
+<?php
+    session_start();
+    if (!isset($_SESSION['user'])) {
+        header('Location: /event-management-system/login');
+        exit;
+    }
+    ?>
     <div class="container">
         <div style="display: flex; justify-content: space-between; align-items: center;">
             <h2>Event List</h2>

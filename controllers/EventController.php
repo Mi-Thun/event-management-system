@@ -63,7 +63,7 @@ class EventController {
     public function registerAttendee() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $event_id = $_POST['event_id'];
-            $user_id = 1;
+            $user_id = 2;
             $this->attendeeModel->register($event_id, $user_id);
             $events = $this->eventModel->getAllEvents();
             header('Location: /event-management-system/');
@@ -91,9 +91,20 @@ class EventController {
         exit();
     }
 
+    // public function viewEvent($id) {
+    //     $event = $this->eventModel->getEventById($id);
+    //     $attendees = $this->attendeeModel->getAttendeesByEventId($id);
+    //     require __DIR__ . '/../views/events/view.php';
+    // }
+
     public function viewEvent($id) {
         $event = $this->eventModel->getEventById($id);
-        $attendees = $this->attendeeModel->getAttendeesByEventId($id);
+        $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+        $limit = 5; 
+        $offset = ($page - 1) * $limit;
+        $attendees = $this->attendeeModel->getPaginatedAttendeesByEventId($id, $limit, $offset);
+        $totalAttendees = $this->attendeeModel->getTotalAttendeesByEventId($id);
+        $totalPages = ceil($totalAttendees / $limit);
         require __DIR__ . '/../views/events/view.php';
     }
 
@@ -101,6 +112,37 @@ class EventController {
         $query = isset($_GET['query']) ? $_GET['query'] : '';
         $events = $this->eventModel->searchEvents($query);
         echo json_encode($events);
+    }
+
+    // public function searchAttendees() {
+    //     $eventId = isset($_GET['eventId']) ? (int)$_GET['eventId'] : 0;
+    //     $query = isset($_GET['query']) ? $_GET['query'] : '';
+    //     $attendees = $this->attendeeModel->searchAttendeesByName($eventId, $query);
+    //     echo json_encode($attendees);
+    // }
+    // public function searchAttendees() {
+    //     $eventId = isset($_GET['eventId']) ? (int)$_GET['eventId'] : 0;
+    //     $query = isset($_GET['query']) ? $_GET['query'] : '';
+    //     $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
+    //     $limit = 5; // Number of attendees per page
+    //     $offset = ($page - 1) * $limit;
+    
+    //     $attendees = $this->attendeeModel->searchAttendeesByName($eventId, $query, $limit, $offset);
+    //     $totalAttendees = $this->attendeeModel->getTotalSearchAttendees($eventId, $query);
+    //     $totalPages = ceil($totalAttendees / $limit);
+    
+    //     echo json_encode([
+    //         'attendees' => $attendees,
+    //         'totalPages' => $totalPages,
+    //         'currentPage' => $page
+    //     ]);
+    // }
+
+    public function searchAttendees() {
+        $eventId = isset($_GET['eventId']) ? (int)$_GET['eventId'] : 0;
+        $query = isset($_GET['query']) ? $_GET['query'] : '';
+        $attendees = $this->attendeeModel->searchAttendeesByName($eventId, $query);
+        echo json_encode($attendees);
     }
 }
 ?>

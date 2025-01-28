@@ -30,6 +30,12 @@ class AuthController {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $email = trim($_POST['email']);
             $password = trim($_POST['password']);
+            
+            if (empty($email) || empty($password)) {
+                $errorMessage = "Email and password cannot be empty.";
+                require __DIR__ . '/../views/auth/login.php';
+                exit;
+            }
 
             if ($this->userModel->login($email, $password)) {
                 $_SESSION['user'] = $email;

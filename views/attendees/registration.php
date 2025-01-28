@@ -32,6 +32,13 @@
     </style>
 </head>
 <body>
+<?php
+    session_start();
+    if (!isset($_SESSION['user'])) {
+        header('Location: /event-management-system/login');
+        exit;
+    }
+    ?>
     <div class="container">
         <h2>Register for Event</h2>
         <form action="/event-management-system/attendee" method="POST">

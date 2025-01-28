@@ -28,6 +28,13 @@
     </style>
 </head>
 <body>
+<?php
+    session_start();
+    if (!isset($_SESSION['user'])) {
+        header('Location: /event-management-system/login');
+        exit;
+    }
+    ?>
     <div class="container">
         <h2>Edit Event</h2>
         <?php if (isset($event) && $event !== false): ?>
