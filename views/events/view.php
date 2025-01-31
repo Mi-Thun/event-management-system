@@ -6,39 +6,26 @@
     <title>Event Management System - Event Details</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css">
     <style>
-        body {
-            background-color: #f8f9fa;
-        }
         .container {
-            background-color: #ffffff;
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
             max-width: 800px;
             margin-top: 8px;
-        }
-        .table {
-            margin-top: 1px;
-        }
-        .btn {
-            margin-right: 5px;
-            margin-bottom: 1px;
-        }
-        .pagination {
-            margin-top: 2px;
         }
     </style>
 </head>
 <body>
 <?php
     session_start();
-    if (!isset($_SESSION['user'])) {
+    if (!isset($_SESSION['email'])) {
         header('Location: /event-management-system/login');
         exit;
     }
 ?>
     <div class="container">
         <div style="display: flex; justify-content: space-between; align-items: center;">
-            <h2>Event Details</h2>
+        <span class="back-icon" onclick="history.back()">&larr; Back</span>
+            <h2>Attendee Details</h2>
             <div class="text-right">
                 <a href="/event-management-system/logout" class="btn btn-secondary">Logout</a>
             </div>
@@ -49,11 +36,11 @@
             <div style="display: flex; justify-content: space-between;">
                 <p><strong>Date: </strong> <?= htmlspecialchars($event['date']) ?></p>
                 <p><strong>Max Capacity: </strong> <?= htmlspecialchars($event['max_capacity']) ?></p>
-                <p><strong>Remain Seat: </strong>20</p>
-                <p><strong>Registered Seat: </strong>20</p>
-                <p><strong>Location: </strong>Dhaka</p>
+                <p><strong>Remain Seat: </strong> <?= htmlspecialchars($remainingSeats) ?></p>
+                <p><strong>Registered Seats: </strong> <?= htmlspecialchars($totalRegisteredSeats) ?></p>
             </div>
         </div>
+        <hr>
         <h3>Attendees</h3>
         <input type="text" id="searchQuery" class="form-control" placeholder="Search attendees" style="margin-top: 20px; margin-bottom: 20px;">
         <table class="table table-striped">
@@ -71,7 +58,7 @@
                         <tr>
                             <td><?= htmlspecialchars($attendee['username']) ?></td>
                             <td><?= htmlspecialchars($attendee['email']) ?></td>
-                            <td>20</td>
+                            <td><?= htmlspecialchars($attendee['seats']) ?></td>
                             <td><?= htmlspecialchars($attendee['registered_at']) ?></td>
                         </tr>
                     <?php endforeach; ?>
@@ -92,8 +79,6 @@
                 <?php endfor; ?>
             </ul>
         </nav>
-
-        <a href="/event-management-system/" class="btn btn-secondary">Back to Events</a>
     </div>
 
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
@@ -120,7 +105,7 @@
                                     <tr>
                                         <td>${attendee.username}</td>
                                         <td>${attendee.email}</td>
-                                        <td>20</td>
+                                        <td>${attendee.seats}</td>
                                         <td>${attendee.registered_at}</td>
                                     </tr>`;
                                 attendeeList.append(attendeeRow);
@@ -149,7 +134,7 @@
                 var query = $('#searchQuery').val();
                 loadAttendees(query, page);
             });
-            
+
             loadAttendees('', 1);
         });
     </script>

@@ -6,37 +6,31 @@
     <title>Edit Event</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css">
     <style>
-        body {
-            background-color: #f8f9fa;
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin: 0;
-        }
         .container {
-            background-color: #ffffff;
-            padding: 30px;
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            max-width: 600px;
-            width: 100%;
-        }
-        h2 {
-            margin-bottom: 20px;
+            max-width: 800px;
+            margin-top: 8px;
         }
     </style>
 </head>
 <body>
 <?php
     session_start();
-    if (!isset($_SESSION['user'])) {
+    if (!isset($_SESSION['email'])) {
         header('Location: /event-management-system/login');
         exit;
     }
     ?>
     <div class="container">
+    <div style="display: flex; justify-content: space-between; align-items: center;">
+
+    <span class="back-icon" onclick="history.back()">&larr; Back</span> 
         <h2>Edit Event</h2>
+        <div class="text-right">
+                <a href="/event-management-system/logout" class="btn btn-secondary">Logout</a>
+            </div>
+        </div>
         <?php if (isset($event) && $event !== false): ?>
         <form action="/event-management-system/events/edit?id=<?= $event['id'] ?>" method="POST">
             <div class="form-group">

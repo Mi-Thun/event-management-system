@@ -6,24 +6,11 @@
     <title>User Registration</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css">
     <style>
-        body {
-            background-color: #f8f9fa;
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin: 0;
-        }
         .container {
-            background-color: #ffffff;
-            padding: 30px;
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            max-width: 600px;
-            width: 100%;
-        }
-        h2 {
-            margin-bottom: 20px;
+            max-width: 800px;
+            margin-top: 8px;
         }
         .btn-link {
             padding-left: 0;
@@ -35,7 +22,7 @@
         <h2>Register</h2>
         <form action="/event-management-system/register" method="POST">
             <div class="form-group">
-                <label for="username">Username</label>
+                <label for="username">Name</label>
                 <input type="text" class="form-control" id="username" name="username" required>
             </div>
             <div class="form-group">

@@ -14,11 +14,18 @@ class AuthController {
             $password = trim($_POST['password']);
             $email = trim($_POST['email']);
 
+            if (empty($username) || empty($password) || empty($email)) {
+                $errorMessage = "All fields are required.";
+                require __DIR__ . '/../views/auth/register.php';
+                exit();
+            }
+
             if ($this->userModel->register($username, $password, $email)) {
                 header('Location: /event-management-system/login');
                 exit();
             } else {
-                header('Location: /event-management-system/');
+                $errorMessage = "Registration failed. Please try again.";
+                require __DIR__ . '/../views/auth/register.php';
                 exit();
             }
         } else {
@@ -34,15 +41,20 @@ class AuthController {
             if (empty($email) || empty($password)) {
                 $errorMessage = "Email and password cannot be empty.";
                 require __DIR__ . '/../views/auth/login.php';
-                exit;
+                exit();
             }
+            $user = $this->userModel->login($email, $password);
+            if ($user) {
+                $_SESSION['id'] = $user['id'];
+                $_SESSION['is_admin'] = $user['is_admin'];
+                $_SESSION['email'] = $email;
+                $_SESSION['username'] = $user['username'];
 
-            if ($this->userModel->login($email, $password)) {
-                $_SESSION['user'] = $email;
                 header('Location: /event-management-system/');
                 exit();
             } else {
-                header('Location: /event-management-system/?action=login&error=1');
+                $errorMessage = "Invalid email or password.";
+                require __DIR__ . '/../views/auth/login.php';
                 exit();
             }
         } else {
@@ -52,7 +64,7 @@ class AuthController {
 
     public function logout() {
         session_destroy();
-        require __DIR__ . '/../views/auth/login.php';
+        header('Location: /event-management-system/login');
         exit();
     }
 }

@@ -16,6 +16,9 @@ class EventController {
         $offset = ($page - 1) * $limit;
     
         $events = $this->eventModel->getEventsWithPagination($limit, $offset);
+        foreach ($events as &$event) {
+            $event['total_seats_booked'] = $this->attendeeModel->getTotalAttendeesByEventId($event['id']);
+        }
         $totalEvents = $this->eventModel->getTotalEvents();
         $totalPages = ceil($totalEvents / $limit);
     
@@ -58,9 +61,10 @@ class EventController {
     public function registerAttendee() {
         if ($_SERVER['REQUEST_METHOD'] === 'POST') {
             $event_id = $_POST['event_id'];
-            $user_id = 2;
-            $this->attendeeModel->register($event_id, $user_id);
-            $events = $this->eventModel->getAllEvents();
+            $user_id = $_POST['user_id'];
+            $seats = $_POST['seats'];
+            $event = $this->eventModel->getEventById($event_id);
+            $this->attendeeModel->register($event_id, $user_id, $seats);
             header('Location: /event-management-system/');
             exit();
         } else {
@@ -72,14 +76,16 @@ class EventController {
     public function downloadReport($event_id) {
         $attendees = $this->attendeeModel->getAttendeesByEventId($event_id);
 
+        print_r($attendees);
+
         header('Content-Type: text/csv');
         header('Content-Disposition: attachment;filename=attendees_report.csv');
 
         $output = fopen('php://output', 'w');
-        fputcsv($output, ['Event ID', 'User Name', 'Email', 'Registered At', 'Seat Booked']);
+        fputcsv($output, ['Event ID', 'User ID', 'Email', 'Registered At', 'Seat Booked']);
 
         foreach ($attendees as $attendee) {
-            fputcsv($output, [$event_id, $attendee['name'], $attendee['email'], $attendee['registered_at']]);
+            fputcsv($output, [$event_id, $attendee['user_id'], '500', $attendee['registered_at'], $attendee['seats']]);
         }
 
         fclose($output);
@@ -88,12 +94,8 @@ class EventController {
 
     public function viewEvent($id) {
         $event = $this->eventModel->getEventById($id);
-        $page = isset($_GET['page']) ? (int)$_GET['page'] : 1;
-        $limit = 5; 
-        $offset = ($page - 1) * $limit;
-        $attendees = $this->attendeeModel->getPaginatedAttendeesByEventId($id, $limit, $offset);
-        $totalAttendees = $this->attendeeModel->getTotalAttendeesByEventId($id);
-        $totalPages = ceil($totalAttendees / $limit);
+        $totalRegisteredSeats = $this->attendeeModel->getTotalAttendeesByEventId($id);
+        $remainingSeats = $event['max_capacity'] - $totalRegisteredSeats;
         require __DIR__ . '/../views/events/view.php';
     }
 
@@ -121,11 +123,14 @@ class EventController {
         ]);
     }
 
-    // public function searchAttendees() {
-    //     $eventId = isset($_GET['eventId']) ? (int)$_GET['eventId'] : 0;
-    //     $query = isset($_GET['query']) ? $_GET['query'] : '';
-    //     $attendees = $this->attendeeModel->searchAttendeesByName($eventId, $query);
-    //     echo json_encode($attendees);
-    // }
+    public function getRegisteredSeats() {
+        if (isset($_GET['event_id'])) {
+            $event_id = (int)$_GET['event_id'];
+            $totalSeats = $this->attendeeModel->getTotalAttendeesByEventId($event_id);
+            $event = $this->eventModel->getEventById($event_id);
+            $remainingSeats = $event['max_capacity'] - $totalSeats;
+            echo json_encode(['totalSeats' => $totalSeats, 'remainingSeats' => $remainingSeats]);
+        }
+    }
 }
 ?>

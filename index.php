@@ -15,6 +15,10 @@ function handleRequest($controllerName, $methodName, $id = null) {
     }
 }
 
+$router->add('/event-management-system/getRegisteredSeats', function() {
+    handleRequest('EventController', 'getRegisteredSeats');
+});
+
 $router->add('/event-management-system/attendee', function() {
     handleRequest('EventController', 'registerAttendee');
 });

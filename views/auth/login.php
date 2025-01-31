@@ -6,24 +6,11 @@
     <title>Login - Event Management System</title>
     <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/css/bootstrap.min.css">
     <style>
-        body {
-            background-color: #f8f9fa;
-            height: 100vh;
-            display: flex;
-            justify-content: center;
-            align-items: center;
-            margin: 0;
-        }
         .container {
-            background-color: #ffffff;
-            padding: 30px;
             border-radius: 8px;
             box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
-            max-width: 600px;
-            width: 100%;
-        }
-        h2 {
-            margin-bottom: 20px;
+            max-width: 800px;
+            margin-top: 8px;
         }
         .btn-link {
             padding-left: 0;
@@ -33,7 +20,7 @@
 <body>
     <div class="container">
         <h2>Login</h2>
-        <form action="/event-management-system/login" method="POST">
+        <form id="loginForm" action="/event-management-system/login" method="POST">
             <div class="form-group">
                 <label for="email">Email</label>
                 <input type="email" class="form-control" id="email" name="email" required>
@@ -46,5 +33,43 @@
             <p>Don't have an account? <a href="/event-management-system/register" class="btn btn-link">Register</a></p>
         </form>
     </div>
+    <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="errorModalLabel">Error</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <?= isset($errorMessage) ? htmlspecialchars($errorMessage) : '' ?>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+    <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"></script>
+    <script>
+        $(document).ready(function() {
+            <?php if (isset($errorMessage)): ?>
+                $('#errorModal').modal('show');
+            <?php endif; ?>
+
+            $('#loginForm').on('submit', function(event) {
+                var email = $('#email').val().trim();
+                var password = $('#password').val().trim();
+                if (email === '' || password === '') {
+                    event.preventDefault();
+                    $('.modal-body').text('Email and password cannot be empty.');
+                    $('#errorModal').modal('show');
+                }
+            });
+        });
+    </script>
 </body>
 </html>
