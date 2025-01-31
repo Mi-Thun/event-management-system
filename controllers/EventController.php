@@ -16,9 +16,7 @@ class EventController {
         $offset = ($page - 1) * $limit;
     
         $events = $this->eventModel->getEventsWithPagination($limit, $offset);
-        foreach ($events as &$event) {
-            $event['total_seats_booked'] = $this->attendeeModel->getTotalAttendeesByEventId($event['id']);
-        }
+
         $totalEvents = $this->eventModel->getTotalEvents();
         $totalPages = ceil($totalEvents / $limit);
     

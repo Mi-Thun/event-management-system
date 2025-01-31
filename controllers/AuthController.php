@@ -12,13 +12,8 @@ class AuthController {
         if ($_SERVER['REQUEST_METHOD'] == 'POST') {
             $username = trim($_POST['username']);
             $password = trim($_POST['password']);
+            $confirm_password = trim($_POST['confirm_password']);
             $email = trim($_POST['email']);
-
-            if (empty($username) || empty($password) || empty($email)) {
-                $errorMessage = "All fields are required.";
-                require __DIR__ . '/../views/auth/register.php';
-                exit();
-            }
 
             if ($this->userModel->register($username, $password, $email)) {
                 header('Location: /event-management-system/login');

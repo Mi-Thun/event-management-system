@@ -45,8 +45,7 @@
                     <th>Name</th>
                     <th>Description</th>
                     <th>Date</th>
-                    <th>Max Capacity</th>
-                    <th>Total Seats Booked</th>
+                    <th>Capacity</th>
                     <th>Actions</th>
                 </tr>
             </thead>
@@ -58,9 +57,8 @@
                             <td><?= htmlspecialchars($event['description']) ?></td>
                             <td><?= htmlspecialchars($event['date']) ?></td>
                             <td><?= htmlspecialchars($event['max_capacity']) ?></td>
-                            <td><?= htmlspecialchars($event['total_seats_booked']) ?></td>
                             <td>
-                                <a href="/event-management-system/events/view?id=<?= $event['id'] ?>" class="btn btn-primary btn-sm">View</a>
+                            <a href="/event-management-system/events/view?id=<?= $event['id'] ?>" class="btn btn-primary btn-sm">View</a>
                                 <?php if ($isAdmin): ?>
                                     <a href="/event-management-system/events/edit?id=<?= $event['id'] ?>" class="btn btn-warning btn-sm">Edit</a>
                                     <a href="/event-management-system/events/delete?id=<?= $event['id'] ?>" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')">Delete</a>
@@ -102,7 +100,7 @@
             success: function(response) {
                 var events = JSON.parse(response);
                 var eventList = $('#eventList');
-                var isAdmin = $('#isAdmin').val() === 'true'; // Get session value
+                var isAdmin = $('#isAdmin').val() === 'true'; 
 
                 eventList.empty();
 
@@ -113,7 +111,6 @@
                             '<td>' + event.description + '</td>' +
                             '<td>' + event.date + '</td>' +
                             '<td>' + event.max_capacity + '</td>' +
-                            '<td>' + event.total_seats_booked + '</td>' +
                             '<td>';
 
                         // Admin actions
@@ -123,7 +120,8 @@
                                         '<a href="/event-management-system/events/delete?id=' + event.id + '" class="btn btn-danger btn-sm" onclick="return confirm(\'Are you sure?\')">Delete</a> ' +
                                         '<a href="/event-management-system/download_report?id=' + event.id + '" class="btn btn-info btn-sm">Report</a> ';
                         } else {
-                            eventRow += '<a href="/event-management-system/attendee?id=' + event.id + '" class="btn btn-info btn-sm">Registration</a>';
+                            eventRow += '<a href="/event-management-system/events/view?id=' + event.id + '" class="btn btn-primary btn-sm">View</a> ' +
+                            '<a href="/event-management-system/attendee?id=' + event.id + '" class="btn btn-info btn-sm">Registration</a>';
                         }
 
                         eventRow += '</td></tr>';
