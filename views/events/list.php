@@ -27,6 +27,8 @@
     <div style="display: flex; justify-content: space-between; align-items: center;">
     <a href="/event-management-system/" class="btn btn-link"><i class="fas fa-home"></i> Home</a>       
     <h2>Event List</h2>
+    <input type="hidden" id="isAdmin" value="<?= $isAdmin ? 'true' : 'false' ?>">
+
             <div class="text-right">
                 <a href="/event-management-system/logout" class="btn btn-secondary">Logout</a>
             </div>
@@ -91,43 +93,50 @@
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <script>
         $(document).ready(function() {
-            $('#searchQuery').on('input', function() {
-                var query = $(this).val();
-                $.ajax({
-                    url: '/event-management-system/search',
-                    type: 'GET',
-                    data: { query: query },
-                    success: function(response) {
-                        var events = JSON.parse(response);
-                        var eventList = $('#eventList');
-                        eventList.empty();
-                        if (events.length > 0) {
-                            events.forEach(function(event) {
-                                var eventRow = '<tr>' +
-                                    '<td>' + event.name + '</td>' +
-                                    '<td>' + event.description + '</td>' +
-                                    '<td>' + event.date + '</td>' +
-                                    '<td>' + event.max_capacity + '</td>' +
-                                    '<td>' + event.total_seats_booked + '</td>' +
-                                    '<td>' +
-                                    '<a href="/event-management-system/events/view?id=' + event.id + '" class="btn btn-primary btn-sm">View</a> ';
-                                if (<?= $isAdmin ? 'true' : 'false' ?>) {
-                                    eventRow += '<a href="/event-management-system/events/edit?id=' + event.id + '" class="btn btn-warning btn-sm">Edit</a> ' +
-                                                '<a href="/event-management-system/events/delete?id=' + event.id + '" class="btn btn-danger btn-sm" onclick="return confirm(\'Are you sure?\')">Delete</a> ' +
-                                                '<a href="/event-management-system/download_report?id=' + event.id + '" class="btn btn-info btn-sm">Report</a> ';
-                                }
-                                eventRow += '<a href="/event-management-system/attendee?id=' + event.id + '" class="btn btn-info btn-sm">Registration</a>' +
-                                            '</td>' +
-                                            '</tr>';
-                                eventList.append(eventRow);
-                            });
+    $('#searchQuery').on('input', function() {
+        var query = $(this).val();
+        $.ajax({
+            url: '/event-management-system/search',
+            type: 'GET',
+            data: { query: query },
+            success: function(response) {
+                var events = JSON.parse(response);
+                var eventList = $('#eventList');
+                var isAdmin = $('#isAdmin').val() === 'true'; // Get session value
+
+                eventList.empty();
+
+                if (events.length > 0) {
+                    events.forEach(function(event) {
+                        var eventRow = '<tr>' +
+                            '<td>' + event.name + '</td>' +
+                            '<td>' + event.description + '</td>' +
+                            '<td>' + event.date + '</td>' +
+                            '<td>' + event.max_capacity + '</td>' +
+                            '<td>' + event.total_seats_booked + '</td>' +
+                            '<td>';
+
+                        // Admin actions
+                        if (isAdmin) {
+                            eventRow += '<a href="/event-management-system/events/view?id=' + event.id + '" class="btn btn-primary btn-sm">View</a> ' +
+                                        '<a href="/event-management-system/events/edit?id=' + event.id + '" class="btn btn-warning btn-sm">Edit</a> ' +
+                                        '<a href="/event-management-system/events/delete?id=' + event.id + '" class="btn btn-danger btn-sm" onclick="return confirm(\'Are you sure?\')">Delete</a> ' +
+                                        '<a href="/event-management-system/download_report?id=' + event.id + '" class="btn btn-info btn-sm">Report</a> ';
                         } else {
-                            eventList.append('<tr><td colspan="5">No events found.</td></tr>');
+                            eventRow += '<a href="/event-management-system/attendee?id=' + event.id + '" class="btn btn-info btn-sm">Registration</a>';
                         }
-                    }
-                });
-            });
+
+                        eventRow += '</td></tr>';
+                        eventList.append(eventRow);
+                    });
+                } else {
+                    eventList.append('<tr><td colspan="6">No events found.</td></tr>');
+                }
+            }
         });
+    });
+});
+
     </script>
 </body>
 </html>

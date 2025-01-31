@@ -51,7 +51,7 @@ class Attendee {
             SELECT attendees.*, users.username, users.email 
             FROM attendees 
             JOIN users ON attendees.user_id = users.id 
-            WHERE attendees.event_id = :event_id AND (users.username LIKE :query OR users.email LIKE :query)
+            WHERE attendees.event_id = :event_id AND (users.username LIKE :query)
             LIMIT :limit OFFSET :offset
         ");
         $searchQuery = '%' . $query . '%';

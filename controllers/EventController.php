@@ -76,8 +76,6 @@ class EventController {
     public function downloadReport($event_id) {
         $attendees = $this->attendeeModel->getAttendeesByEventId($event_id);
 
-        print_r($attendees);
-
         header('Content-Type: text/csv');
         header('Content-Disposition: attachment;filename=attendees_report.csv');
 

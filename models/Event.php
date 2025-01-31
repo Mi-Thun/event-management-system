@@ -55,9 +55,9 @@ class Event {
     }
 
     public function searchEvents($query) {
-        $stmt = $this->db->prepare("SELECT * FROM events WHERE name LIKE ? OR description LIKE ?");
+        $stmt = $this->db->prepare("SELECT * FROM events WHERE name LIKE ?");
         $searchQuery = '%' . $query . '%';
-        $stmt->execute([$searchQuery, $searchQuery]);
+        $stmt->execute([$searchQuery]);
         return $stmt->fetchAll(PDO::FETCH_ASSOC);
     }
 }
