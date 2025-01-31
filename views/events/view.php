@@ -1,5 +1,13 @@
+<?php
+session_start();
+if (!isset($_SESSION['email'])) {
+    header('Location: /event-management-system/login');
+    exit;
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,17 +22,11 @@
         }
     </style>
 </head>
+
 <body>
-<?php
-    session_start();
-    if (!isset($_SESSION['email'])) {
-        header('Location: /event-management-system/login');
-        exit;
-    }
-?>
     <div class="container">
         <div style="display: flex; justify-content: space-between; align-items: center;">
-        <span class="back-icon" onclick="history.back()">&larr; Back</span>
+            <span class="back-icon" onclick="history.back()">&larr; Back</span>
             <h2>Attendee Details</h2>
             <div class="text-right">
                 <a href="/event-management-system/logout" class="btn btn-secondary">Logout</a>
@@ -42,7 +44,8 @@
         </div>
         <hr>
         <h3>Attendees</h3>
-        <input type="text" id="searchQuery" class="form-control" placeholder="Search attendees" style="margin-top: 20px; margin-bottom: 20px;">
+        <input type="text" id="searchQuery" class="form-control" placeholder="Search attendees"
+            style="margin-top: 20px; margin-bottom: 20px;">
         <table class="table table-striped">
             <thead>
                 <tr>
@@ -83,14 +86,14 @@
 
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <script>
-        $(document).ready(function() {
+        $(document).ready(function () {
             function loadAttendees(query, page) {
                 var eventId = <?= $event['id'] ?>;
                 $.ajax({
                     url: '/event-management-system/searchAttendees',
                     type: 'GET',
                     data: { query: query, eventId: eventId, page: page },
-                    success: function(response) {
+                    success: function (response) {
                         var data = JSON.parse(response);
                         var attendees = data.attendees;
                         var totalPages = data.totalPages;
@@ -100,7 +103,7 @@
                         attendeeList.empty();
                         pagination.empty();
                         if (attendees.length > 0) {
-                            attendees.forEach(function(attendee) {
+                            attendees.forEach(function (attendee) {
                                 var attendeeRow = `
                                     <tr>
                                         <td>${attendee.username}</td>
@@ -123,12 +126,12 @@
                 });
             }
 
-            $('#searchQuery').on('input', function() {
+            $('#searchQuery').on('input', function () {
                 var query = $(this).val();
                 loadAttendees(query, 1);
             });
 
-            $(document).on('click', '.page-link', function(e) {
+            $(document).on('click', '.page-link', function (e) {
                 e.preventDefault();
                 var page = $(this).data('page');
                 var query = $('#searchQuery').val();
@@ -139,4 +142,5 @@
         });
     </script>
 </body>
+
 </html>

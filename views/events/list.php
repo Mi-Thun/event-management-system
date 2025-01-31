@@ -1,5 +1,14 @@
+<?php
+session_start();
+if (!isset($_SESSION['email'])) {
+    header('Location: /event-management-system/login');
+    exit;
+}
+$isAdmin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
+?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,30 +23,24 @@
         }
     </style>
 </head>
+
 <body>
-<?php
-    session_start();
-    if (!isset($_SESSION['email'])) {
-        header('Location: /event-management-system/login');
-        exit;
-    }
-    $isAdmin = isset($_SESSION['is_admin']) && $_SESSION['is_admin'];
-?>
     <div class="container">
-    <div style="display: flex; justify-content: space-between; align-items: center;">
-    <a href="/event-management-system/" class="btn btn-link"><i class="fas fa-home"></i> Home</a>       
-    <h2>Event List</h2>
-    <input type="hidden" id="isAdmin" value="<?= $isAdmin ? 'true' : 'false' ?>">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <a href="/event-management-system/" class="btn btn-link"><i class="fas fa-home"></i> Home</a>
+            <h2>Event List</h2>
+            <input type="hidden" id="isAdmin" value="<?= $isAdmin ? 'true' : 'false' ?>">
 
             <div class="text-right">
                 <a href="/event-management-system/logout" class="btn btn-secondary">Logout</a>
             </div>
         </div>
-        <input type="text" id="searchQuery" class="form-control" placeholder="Search events or attendees" style="margin-top: 20px; margin-bottom: 20px;">
+        <input type="text" id="searchQuery" class="form-control" placeholder="Search events or attendees"
+            style="margin-top: 20px; margin-bottom: 20px;">
         <?php if ($isAdmin): ?>
-        <div class="text-right">
-            <a href="/event-management-system/events/create" class="btn btn-primary">Create Event</a>
-        </div>
+            <div class="text-right">
+                <a href="/event-management-system/events/create" class="btn btn-primary">Create Event</a>
+            </div>
         <?php endif; ?>
         <table class="table table-striped">
             <thead>
@@ -58,13 +61,18 @@
                             <td><?= htmlspecialchars($event['date']) ?></td>
                             <td><?= htmlspecialchars($event['max_capacity']) ?></td>
                             <td>
-                            <a href="/event-management-system/events/view?id=<?= $event['id'] ?>" class="btn btn-primary btn-sm">View</a>
+                                <a href="/event-management-system/events/view?id=<?= $event['id'] ?>"
+                                    class="btn btn-primary btn-sm">View</a>
                                 <?php if ($isAdmin): ?>
-                                    <a href="/event-management-system/events/edit?id=<?= $event['id'] ?>" class="btn btn-warning btn-sm">Edit</a>
-                                    <a href="/event-management-system/events/delete?id=<?= $event['id'] ?>" class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')">Delete</a>
-                                    <a href="/event-management-system/download_report?id=<?= $event['id'] ?>" class="btn btn-info btn-sm">Report</a>
+                                    <a href="/event-management-system/events/edit?id=<?= $event['id'] ?>"
+                                        class="btn btn-warning btn-sm">Edit</a>
+                                    <a href="/event-management-system/events/delete?id=<?= $event['id'] ?>"
+                                        class="btn btn-danger btn-sm" onclick="return confirm('Are you sure?')">Delete</a>
+                                    <a href="/event-management-system/download_report?id=<?= $event['id'] ?>"
+                                        class="btn btn-info btn-sm">Report</a>
                                 <?php else: ?>
-                                    <a href="/event-management-system/attendee?id=<?= $event['id'] ?>" class="btn btn-info btn-sm">Registration</a>
+                                    <a href="/event-management-system/attendee?id=<?= $event['id'] ?>"
+                                        class="btn btn-info btn-sm">Registration</a>
                                 <?php endif; ?>
                             </td>
                         </tr>
@@ -90,51 +98,52 @@
 
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <script>
-        $(document).ready(function() {
-    $('#searchQuery').on('input', function() {
-        var query = $(this).val();
-        $.ajax({
-            url: '/event-management-system/search',
-            type: 'GET',
-            data: { query: query },
-            success: function(response) {
-                var events = JSON.parse(response);
-                var eventList = $('#eventList');
-                var isAdmin = $('#isAdmin').val() === 'true'; 
+        $(document).ready(function () {
+            $('#searchQuery').on('input', function () {
+                var query = $(this).val();
+                $.ajax({
+                    url: '/event-management-system/search',
+                    type: 'GET',
+                    data: { query: query },
+                    success: function (response) {
+                        var events = JSON.parse(response);
+                        var eventList = $('#eventList');
+                        var isAdmin = $('#isAdmin').val() === 'true';
 
-                eventList.empty();
+                        eventList.empty();
 
-                if (events.length > 0) {
-                    events.forEach(function(event) {
-                        var eventRow = '<tr>' +
-                            '<td>' + event.name + '</td>' +
-                            '<td>' + event.description + '</td>' +
-                            '<td>' + event.date + '</td>' +
-                            '<td>' + event.max_capacity + '</td>' +
-                            '<td>';
+                        if (events.length > 0) {
+                            events.forEach(function (event) {
+                                var eventRow = '<tr>' +
+                                    '<td>' + event.name + '</td>' +
+                                    '<td>' + event.description + '</td>' +
+                                    '<td>' + event.date + '</td>' +
+                                    '<td>' + event.max_capacity + '</td>' +
+                                    '<td>';
 
-                        // Admin actions
-                        if (isAdmin) {
-                            eventRow += '<a href="/event-management-system/events/view?id=' + event.id + '" class="btn btn-primary btn-sm">View</a> ' +
+                                // Admin actions
+                                if (isAdmin) {
+                                    eventRow += '<a href="/event-management-system/events/view?id=' + event.id + '" class="btn btn-primary btn-sm">View</a> ' +
                                         '<a href="/event-management-system/events/edit?id=' + event.id + '" class="btn btn-warning btn-sm">Edit</a> ' +
                                         '<a href="/event-management-system/events/delete?id=' + event.id + '" class="btn btn-danger btn-sm" onclick="return confirm(\'Are you sure?\')">Delete</a> ' +
                                         '<a href="/event-management-system/download_report?id=' + event.id + '" class="btn btn-info btn-sm">Report</a> ';
-                        } else {
-                            eventRow += '<a href="/event-management-system/events/view?id=' + event.id + '" class="btn btn-primary btn-sm">View</a> ' +
-                            '<a href="/event-management-system/attendee?id=' + event.id + '" class="btn btn-info btn-sm">Registration</a>';
-                        }
+                                } else {
+                                    eventRow += '<a href="/event-management-system/events/view?id=' + event.id + '" class="btn btn-primary btn-sm">View</a> ' +
+                                        '<a href="/event-management-system/attendee?id=' + event.id + '" class="btn btn-info btn-sm">Registration</a>';
+                                }
 
-                        eventRow += '</td></tr>';
-                        eventList.append(eventRow);
-                    });
-                } else {
-                    eventList.append('<tr><td colspan="6">No events found.</td></tr>');
-                }
-            }
+                                eventRow += '</td></tr>';
+                                eventList.append(eventRow);
+                            });
+                        } else {
+                            eventList.append('<tr><td colspan="6">No events found.</td></tr>');
+                        }
+                    }
+                });
+            });
         });
-    });
-});
 
     </script>
 </body>
+
 </html>

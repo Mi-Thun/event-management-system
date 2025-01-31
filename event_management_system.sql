@@ -3,7 +3,7 @@
 -- https://www.phpmyadmin.net/
 --
 -- Host: 127.0.0.1
--- Generation Time: Jan 29, 2025 at 08:24 PM
+-- Generation Time: Jan 31, 2025 at 01:51 PM
 -- Server version: 10.4.32-MariaDB
 -- PHP Version: 8.2.12
 
@@ -40,22 +40,9 @@ CREATE TABLE `attendees` (
 --
 
 INSERT INTO `attendees` (`id`, `event_id`, `user_id`, `registered_at`, `seats`) VALUES
-(1, 17, 1, '2025-01-25 17:39:36', NULL),
-(2, 17, 1, '2025-01-25 17:52:45', NULL),
-(3, 2, 1, '2025-01-26 19:07:25', NULL),
-(4, 2, 1, '2025-01-26 19:08:49', NULL),
-(5, 2, 1, '2025-01-26 19:08:51', NULL),
-(6, 2, 1, '2025-01-26 19:08:52', NULL),
-(7, 16, 1, '2025-01-26 19:09:23', NULL),
-(8, 16, 1, '2025-01-26 19:10:00', NULL),
-(9, 2, 1, '2025-01-26 19:10:06', NULL),
-(10, 2, 1, '2025-01-26 19:10:55', NULL),
-(11, 2, 1, '2025-01-26 19:12:35', NULL),
-(12, 2, 1, '2025-01-26 20:04:15', NULL),
-(13, 2, 1, '2025-01-26 20:04:20', NULL),
-(15, 2, 2, '2025-01-28 17:44:58', NULL),
-(16, 17, 2, '2025-01-29 19:11:24', 20),
-(17, 17, 2, '2025-01-29 19:13:09', 56);
+(23, 19, 3, '2025-01-31 09:02:02', 10),
+(24, 19, 3, '2025-01-31 12:20:53', 10),
+(25, 19, 2, '2025-01-31 12:21:07', 50);
 
 -- --------------------------------------------------------
 
@@ -78,12 +65,8 @@ CREATE TABLE `events` (
 --
 
 INSERT INTO `events` (`id`, `name`, `description`, `date`, `max_capacity`, `created_by`, `created_at`) VALUES
-(2, 'Mithundfdfbv', 'dfdfb', '2025-01-25', 22, NULL, '2025-01-24 09:26:33'),
-(13, 'gddfg', 'dgdg', '2025-01-09', 0, NULL, '2025-01-25 10:46:54'),
-(14, 'Dhumchika', 'fhgfg', '2025-01-16', 0, NULL, '2025-01-25 10:50:35'),
-(16, 'etfre mk', 'mk', '2025-01-24', 2, NULL, '2025-01-25 17:14:49'),
-(17, 'Mithn', 'dsvdsv', '2025-01-11', 34, NULL, '2025-01-25 17:18:31'),
-(18, 'drgfdfbgfbfgb', 'jhvjhv', '2025-01-22', 22, NULL, '2025-01-26 20:04:46');
+(19, 'Grand Gala Nights', 'An elegant evening gathering featuring entertainment and fine dining.', '2025-02-28', 80, NULL, '2025-01-31 08:56:14'),
+(20, 'Evening of Elegance', 'A refined event showcasing art, culture, and gourmet experiences.', '2025-02-08', 20, NULL, '2025-01-31 08:57:14');
 
 -- --------------------------------------------------------
 
@@ -105,8 +88,9 @@ CREATE TABLE `users` (
 --
 
 INSERT INTO `users` (`id`, `username`, `email`, `password`, `created_at`, `is_admin`) VALUES
-(1, 'mithun', 'mithun@gmail.com', '$2y$10$SpSpo8O9P7nS9Xz1XmU77OBrSV8dWeZpcPE6r6onKedFk.8Y4OqA6', '2025-01-24 07:56:30', 1),
-(2, 'sifit', 'sifit@gmail.com', '$2y$10$QtncLTsbC5e1DIrq7Kp.dugkOhNjvFwAOToWWEgbO2ZQHGVN6zqj.', '2025-01-25 10:11:06', 0);
+(1, 'Admin', 'admin@gmail.com', '$2y$10$SpSpo8O9P7nS9Xz1XmU77OBrSV8dWeZpcPE6r6onKedFk.8Y4OqA6', '2025-01-24 07:56:30', 1),
+(2, 'Mithun', 'mithun@gmail.com', '$2y$10$QtncLTsbC5e1DIrq7Kp.dugkOhNjvFwAOToWWEgbO2ZQHGVN6zqj.', '2025-01-25 10:11:06', 0),
+(3, 'Bob', 'bob@gmail.com', '$2y$10$AYEml..Oo478Nsycc.CmtuiGpBAHsyv6YE2dns5MOiOOoH39kR/Ee', '2025-01-31 08:54:10', 0);
 
 --
 -- Indexes for dumped tables
@@ -143,19 +127,19 @@ ALTER TABLE `users`
 -- AUTO_INCREMENT for table `attendees`
 --
 ALTER TABLE `attendees`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=18;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=26;
 
 --
 -- AUTO_INCREMENT for table `events`
 --
 ALTER TABLE `events`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=19;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=21;
 
 --
 -- AUTO_INCREMENT for table `users`
 --
 ALTER TABLE `users`
-  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=3;
+  MODIFY `id` int(11) NOT NULL AUTO_INCREMENT, AUTO_INCREMENT=6;
 
 --
 -- Constraints for dumped tables

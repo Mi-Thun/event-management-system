@@ -1,5 +1,19 @@
+<?php
+session_start();
+if (!isset($_SESSION['email'])) {
+    header('Location: /event-management-system/login');
+    exit;
+}
+$userId = isset($_SESSION['id']) ? $_SESSION['id'] : null;
+if (!$userId) {
+    echo "User ID not found in session.";
+    exit;
+}
+$selectedEventId = isset($_GET['id']) ? $_GET['id'] : null;
+?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -15,25 +29,14 @@
         }
     </style>
 </head>
+
 <body>
-<?php
-    session_start();
-    if (!isset($_SESSION['email'])) {
-        header('Location: /event-management-system/login');
-        exit;
-    }
-    $userId = isset($_SESSION['id']) ? $_SESSION['id'] : null;
-    if (!$userId) {
-        echo "User ID not found in session.";
-        exit;
-    }
-    $selectedEventId = isset($_GET['id']) ? $_GET['id'] : null;
-?>
+
     <div class="container">
-    <div style="display: flex; justify-content: space-between; align-items: center;">
-    <span class="back-icon" onclick="history.back()">&larr; Back</span> 
-        <h2>Register for Event</h2>
-        <div class="text-right">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <span class="back-icon" onclick="history.back()">&larr; Back</span>
+            <h2>Register for Event</h2>
+            <div class="text-right">
                 <a href="/event-management-system/logout" class="btn btn-secondary">Logout</a>
             </div>
         </div>
@@ -41,10 +44,10 @@
             <p><strong>Event Name: </strong><span id="eventName"></span></p>
             <p><strong>Description: </strong><span id="eventDescription"></span></p>
             <div style="display: flex; justify-content: space-between;">
-            <p><strong>Date: </strong><span id="eventDate"></span></p>
-            <p><strong>Max Capacity: </strong><span id="eventMaxCapacity"></span></p>
-            <p><strong>Remaining Seats: </strong><span id="remainingSeats"></span></p>
-            <p><strong>Registered Seats: </strong><span id="totalSeats"></span></p>
+                <p><strong>Date: </strong><span id="eventDate"></span></p>
+                <p><strong>Max Capacity: </strong><span id="eventMaxCapacity"></span></p>
+                <p><strong>Remaining Seats: </strong><span id="remainingSeats"></span></p>
+                <p><strong>Registered Seats: </strong><span id="totalSeats"></span></p>
             </div>
         </div>
         <hr>
@@ -55,7 +58,12 @@
                 <select class="form-control" id="event_id" name="event_id" required>
                     <?php if (!empty($events_drop)): ?>
                         <?php foreach ($events_drop as $event): ?>
-                            <option value="<?= $event['id'] ?>" data-name="<?= htmlspecialchars($event['name']) ?>" data-description="<?= htmlspecialchars($event['description']) ?>" data-date="<?= htmlspecialchars($event['date']) ?>" data-max-capacity="<?= htmlspecialchars($event['max_capacity']) ?>" <?= $selectedEventId == $event['id'] ? 'selected' : '' ?>><?= htmlspecialchars($event['name']) ?></option>
+                            <option value="<?= $event['id'] ?>" data-name="<?= htmlspecialchars($event['name']) ?>"
+                                data-description="<?= htmlspecialchars($event['description']) ?>"
+                                data-date="<?= htmlspecialchars($event['date']) ?>"
+                                data-max-capacity="<?= htmlspecialchars($event['max_capacity']) ?>"
+                                <?= $selectedEventId == $event['id'] ? 'selected' : '' ?>><?= htmlspecialchars($event['name']) ?>
+                            </option>
                         <?php endforeach; ?>
                     <?php else: ?>
                         <option value="">No events available</option>
@@ -72,7 +80,8 @@
     </div>
 
     <!-- Bootstrap Modal -->
-    <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel" aria-hidden="true">
+    <div class="modal fade" id="errorModal" tabindex="-1" role="dialog" aria-labelledby="errorModalLabel"
+        aria-hidden="true">
         <div class="modal-dialog" role="document">
             <div class="modal-content">
                 <div class="modal-header">
@@ -94,7 +103,7 @@
     <script src="https://code.jquery.com/jquery-3.3.1.min.js"></script>
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@3.3.7/dist/js/bootstrap.min.js"></script>
     <script>
-        $(document).ready(function() {
+        $(document).ready(function () {
             function updateEventDetails() {
                 var selectedOption = $('#event_id').find('option:selected');
                 $('#eventName').text(selectedOption.data('name'));
@@ -107,24 +116,24 @@
                     url: '/event-management-system/getRegisteredSeats',
                     type: 'GET',
                     data: { event_id: eventId },
-                    success: function(response) {
+                    success: function (response) {
                         var data = JSON.parse(response);
                         $('#totalSeats').text(data.totalSeats);
                         $('#remainingSeats').text(data.remainingSeats);
                     },
-                    error: function(xhr, status, error) {
-                        console.error(xhr.responseText); 
+                    error: function (xhr, status, error) {
+                        console.error(xhr.responseText);
                     }
                 });
             }
 
-            $('#event_id').on('change', function() {
+            $('#event_id').on('change', function () {
                 updateEventDetails();
             });
 
             updateEventDetails();
 
-            $('#registrationForm').on('submit', function(event) {
+            $('#registrationForm').on('submit', function (event) {
                 var remainingSeats = parseInt($('#remainingSeats').text());
                 var seatsToBook = parseInt($('#seats').val());
                 if (seatsToBook > remainingSeats) {
@@ -137,4 +146,5 @@
         });
     </script>
 </body>
+
 </html>

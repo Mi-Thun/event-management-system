@@ -1,5 +1,13 @@
+<?php
+session_start();
+if (!isset($_SESSION['email'])) {
+    header('Location: /event-management-system/login');
+    exit;
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,19 +22,13 @@
         }
     </style>
 </head>
+
 <body>
-<?php
-    session_start();
-    if (!isset($_SESSION['email'])) {
-        header('Location: /event-management-system/login');
-        exit;
-    }
-    ?>
     <div class="container">
-    <div style="display: flex; justify-content: space-between; align-items: center;">
-    <span class="back-icon" onclick="history.back()">&larr; Back</span> 
-        <h2>Create New Event</h2>
-        <div class="text-right">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+            <span class="back-icon" onclick="history.back()">&larr; Back</span>
+            <h2>Create New Event</h2>
+            <div class="text-right">
                 <a href="/event-management-system/logout" class="btn btn-secondary">Logout</a>
             </div>
         </div>
@@ -52,4 +54,5 @@
         </form>
     </div>
 </body>
+
 </html>

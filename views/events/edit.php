@@ -1,5 +1,13 @@
+<?php
+session_start();
+if (!isset($_SESSION['email'])) {
+    header('Location: /event-management-system/login');
+    exit;
+}
+?>
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
@@ -14,47 +22,46 @@
         }
     </style>
 </head>
-<body>
-<?php
-    session_start();
-    if (!isset($_SESSION['email'])) {
-        header('Location: /event-management-system/login');
-        exit;
-    }
-    ?>
-    <div class="container">
-    <div style="display: flex; justify-content: space-between; align-items: center;">
 
-    <span class="back-icon" onclick="history.back()">&larr; Back</span> 
-        <h2>Edit Event</h2>
-        <div class="text-right">
+<body>
+    <div class="container">
+        <div style="display: flex; justify-content: space-between; align-items: center;">
+
+            <span class="back-icon" onclick="history.back()">&larr; Back</span>
+            <h2>Edit Event</h2>
+            <div class="text-right">
                 <a href="/event-management-system/logout" class="btn btn-secondary">Logout</a>
             </div>
         </div>
         <?php if (isset($event) && $event !== false): ?>
-        <form action="/event-management-system/events/edit?id=<?= $event['id'] ?>" method="POST">
-            <div class="form-group">
-                <label for="name">Event Name</label>
-                <input type="text" class="form-control" id="name" name="name" value="<?= htmlspecialchars($event['name']) ?>" required>
-            </div>
-            <div class="form-group">
-                <label for="description">Description</label>
-                <textarea class="form-control" id="description" name="description" required><?= htmlspecialchars($event['description']) ?></textarea>
-            </div>
-            <div class="form-group">
-                <label for="date">Date</label>
-                <input type="date" class="form-control" id="date" name="date" value="<?= htmlspecialchars($event['date']) ?>" required>
-            </div>
-            <div class="form-group">
-                <label for="max_capacity">Max Capacity</label>
-                <input type="number" class="form-control" id="max_capacity" name="max_capacity" value="<?= htmlspecialchars($event['max_capacity']) ?>" required>
-            </div>
-            <button type="submit" class="btn btn-primary btn-block">Update Event</button>
-            <a href="/event-management-system/" class="btn btn-secondary btn-block">Cancel</a>
-        </form>
+            <form action="/event-management-system/events/edit?id=<?= $event['id'] ?>" method="POST">
+                <div class="form-group">
+                    <label for="name">Event Name</label>
+                    <input type="text" class="form-control" id="name" name="name"
+                        value="<?= htmlspecialchars($event['name']) ?>" required>
+                </div>
+                <div class="form-group">
+                    <label for="description">Description</label>
+                    <textarea class="form-control" id="description" name="description"
+                        required><?= htmlspecialchars($event['description']) ?></textarea>
+                </div>
+                <div class="form-group">
+                    <label for="date">Date</label>
+                    <input type="date" class="form-control" id="date" name="date"
+                        value="<?= htmlspecialchars($event['date']) ?>" required>
+                </div>
+                <div class="form-group">
+                    <label for="max_capacity">Max Capacity</label>
+                    <input type="number" class="form-control" id="max_capacity" name="max_capacity"
+                        value="<?= htmlspecialchars($event['max_capacity']) ?>" required>
+                </div>
+                <button type="submit" class="btn btn-primary btn-block">Update Event</button>
+                <a href="/event-management-system/" class="btn btn-secondary btn-block">Cancel</a>
+            </form>
         <?php else: ?>
-        <p>Error: Event not found.</p>
+            <p>Error: Event not found.</p>
         <?php endif; ?>
     </div>
 </body>
+
 </html>

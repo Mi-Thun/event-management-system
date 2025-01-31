@@ -4,7 +4,8 @@ require_once 'Router.php';
 
 $router = new Router();
 
-function handleRequest($controllerName, $methodName, $id = null) {
+function handleRequest($controllerName, $methodName, $id = null)
+{
     require_once "controllers/{$controllerName}.php";
     $db = (new DatabaseConnection())->connect();
     $controller = new $controllerName($db);
@@ -15,43 +16,43 @@ function handleRequest($controllerName, $methodName, $id = null) {
     }
 }
 
-$router->add('/event-management-system/getRegisteredSeats', function() {
+$router->add('/event-management-system/getRegisteredSeats', function () {
     handleRequest('EventController', 'getRegisteredSeats');
 });
 
-$router->add('/event-management-system/attendee', function() {
+$router->add('/event-management-system/attendee', function () {
     handleRequest('EventController', 'registerAttendee');
 });
 
-$router->add('/event-management-system/events/create', function() {
+$router->add('/event-management-system/events/create', function () {
     handleRequest('EventController', 'create');
 });
 
-$router->add('/event-management-system/events/edit', function() {
+$router->add('/event-management-system/events/edit', function () {
     handleRequest('EventController', 'edit', $_GET['id']);
 });
 
-$router->add('/event-management-system/events/delete', function() {
+$router->add('/event-management-system/events/delete', function () {
     handleRequest('EventController', 'delete', $_GET['id']);
 });
 
-$router->add('/event-management-system/login', function() {
+$router->add('/event-management-system/login', function () {
     handleRequest('AuthController', 'login');
 });
 
-$router->add('/event-management-system/register', function() {
+$router->add('/event-management-system/register', function () {
     handleRequest('AuthController', 'register');
 });
 
-$router->add('/event-management-system/logout', function() {
+$router->add('/event-management-system/logout', function () {
     handleRequest('AuthController', 'logout');
 });
 
-$router->add('/event-management-system/', function() {
+$router->add('/event-management-system/', function () {
     handleRequest('EventController', 'index');
 });
 
-$router->add('/event-management-system/download_report', function() {
+$router->add('/event-management-system/download_report', function () {
     handleRequest('EventController', 'downloadReport', $_GET['id']);
 });
 
@@ -61,19 +62,24 @@ if ($_SERVER['REQUEST_URI'] == '/event-management-system/index.php') {
     exit();
 }
 
-$router->add('/event-management-system/events/view', function() {
+$router->add('/event-management-system/events/view', function () {
     handleRequest('EventController', 'viewEvent', $_GET['id']);
 });
 
-$router->add('/event-management-system/search', function() {
+$router->add('/event-management-system/search', function () {
     handleRequest('EventController', 'search');
 });
 
-$router->add('/event-management-system/searchAttendees', function() {
+$router->add('/event-management-system/searchAttendees', function () {
     handleRequest('EventController', 'searchAttendees');
 });
 
+// $url = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
+// parse_str(parse_url($_SERVER['REQUEST_URI'], PHP_URL_QUERY), $_GET);
+// $router->dispatch($url);
 $url = parse_url($_SERVER['REQUEST_URI'], PHP_URL_PATH);
-parse_str(parse_url($_SERVER['REQUEST_URI'], PHP_URL_QUERY), $_GET);
+$queryString = parse_url($_SERVER['REQUEST_URI'], PHP_URL_QUERY) ?? '';
+parse_str($queryString, $_GET);
 $router->dispatch($url);
+
 ?>

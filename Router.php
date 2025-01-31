@@ -1,12 +1,15 @@
 <?php
-class Router {
+class Router
+{
     private $routes = [];
 
-    public function add($route, $callback) {
+    public function add($route, $callback)
+    {
         $this->routes[$route] = $callback;
     }
 
-    public function dispatch($url) {
+    public function dispatch($url)
+    {
         foreach ($this->routes as $route => $callback) {
             if ($route === $url) {
                 return call_user_func($callback);
